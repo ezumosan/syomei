@@ -16,7 +16,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ message: first }, { status: 400 });
   }
 
-  const { student_id, name, email } = parsed.data;
+  const { student_id, name } = parsed.data;
+  const email = `${student_id}@soismail.jp`;
 
   let supabaseAdmin;
   try {

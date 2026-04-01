@@ -6,7 +6,6 @@ export const signatureSchema = z.object({
     .min(1, "学籍番号は必須です")
     .regex(/^[A-Za-z0-9]+$/, "学籍番号は半角英数字で入力してください"),
   name: z.string().min(1, "氏名は必須です").max(100, "氏名が長すぎます"),
-  email: z.string().email("メールアドレスの形式が不正です"),
   agreed: z.literal(true, {
     errorMap: () => ({ message: "同意チェックが必要です" }),
   }),

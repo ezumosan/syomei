@@ -11,11 +11,12 @@ type ApiResponse = {
 export default function SignPage() {
   const [studentId, setStudentId] = useState("");
   const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
   const [agreed, setAgreed] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+
+  const generatedEmail = studentId ? `${studentId}@soismail.jp` : "（学籍番号入力後に表示）";
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -32,7 +33,6 @@ export default function SignPage() {
         body: JSON.stringify({
           student_id: studentId.trim(),
           name: name.trim(),
-          email: email.trim(),
           agreed,
         }),
       });
@@ -47,7 +47,6 @@ export default function SignPage() {
       setSuccess(data.message || "署名が完了しました");
       setStudentId("");
       setName("");
-      setEmail("");
       setAgreed(false);
     } catch {
       setError("通信エラーが発生しました。時間をおいて再度お試しください。");
@@ -97,21 +96,14 @@ export default function SignPage() {
           </div>
 
           <div>
-            <label htmlFor="email" className="mb-1 block text-sm font-medium text-slate-700">
-              メールアドレス
-            </label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              autoComplete="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-lg border border-slate-300 px-3 py-2 outline-none ring-brand-500 focus:ring"
-              required
-            />
+            <p className="mb-1 block text-sm font-medium text-slate-700">通知先メールアドレス</p>
+            <p className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-700">
+              {generatedEmail}
+            </p>
+            <p className="mt-1 text-xs text-slate-500">学籍番号をもとに自動設定されます。</p>
           </div>
 
+          {/* 【テキスト編集用マーカー】BEGIN: PRIVACY_POLICY */}
           <label className="flex items-start gap-2 rounded-lg border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700">
             <input
               type="checkbox"
@@ -120,8 +112,11 @@ export default function SignPage() {
               className="mt-0.5 h-4 w-4"
               required
             />
-            <span>プライバシーポリシーに同意し、署名内容は適切に管理されることを理解しました。</span>
+            <span id="EDITABLE_PRIVACY_POLICY_TEXT">
+              プライバシーポリシーに同意し、署名内容は適切に管理されることを理解しました。取得した個人情報は本署名の運営目的以外には利用しません。
+            </span>
           </label>
+          {/* 【テキスト編集用マーカー】END: PRIVACY_POLICY */}
 
           {error && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>}
           {success && <p className="rounded-lg bg-green-50 px-3 py-2 text-sm text-green-700">{success}</p>}
